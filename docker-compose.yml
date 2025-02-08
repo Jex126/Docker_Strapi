@@ -7,6 +7,7 @@ services:
       context: .
     restart: unless-stopped
     networks:
+      - traefik-net
       - strapidb
     ports:
       - "1337:1337"
@@ -15,6 +16,14 @@ services:
     volumes:
       - /opt/app/strapi/node_modules
       - ./strapi/:/opt/app/strapi
+    labels:
+      - "traefik.enable=true"
+      - "traefik.http.routers.strapi.rule=Host(`api-amfode.localhost`)"
+      - "traefik.http.routers.strapi.entrypoints=websecure"
+      - "traefik.http.routers.strapi.tls=true"
+      - "traefik.http.routers.strapi.tls.certresolver=myresolver"
+      - "traefik.http.services.strapi.loadbalancer.server.port=1337"
+
   strapiDB:
     container_name: strapiDB
     platform: linux/amd64 #for platform error on Apple M1 chips
@@ -30,7 +39,11 @@ services:
       - "5432:5432"
     networks:
       - strapidb
+    labels:
+      - "traefik.enable=false"
 networks:
+  traefik-net:
+    external: true
   strapidb:
     name: strapidb
     driver: bridge
