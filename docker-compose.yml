@@ -18,7 +18,7 @@ services:
       - ./strapi/:/opt/app/strapi
     labels:
       - "traefik.enable=true"
-      - "traefik.http.routers.strapi.rule=Host(`api-amfode.localhost`)"
+      - "traefik.http.routers.strapi.rule=Host(`api-amfode.synersol.mx`)"
       - "traefik.http.routers.strapi.entrypoints=websecure"
       - "traefik.http.routers.strapi.tls=true"
       - "traefik.http.routers.strapi.tls.certresolver=myresolver"
